@@ -9,10 +9,10 @@
       "Retry": [
         {
           "ErrorEquals": [
-            "States.TaskFailed"
+            "errorString"
           ],
           "IntervalSeconds": 5,
-          "MaxAttempts": 0,
+          "MaxAttempts": 1,
           "BackoffRate": 2
         }
       ],
@@ -39,7 +39,7 @@
       "Retry": [
         {
           "ErrorEquals": [
-            "States.TaskFailed"
+            "errorString"
           ],
           "IntervalSeconds": 5,
           "MaxAttempts": 1,
@@ -69,7 +69,7 @@
       "Retry": [
         {
           "ErrorEquals": [
-            "States.TaskFailed"
+            "errorString"
           ],
           "IntervalSeconds": 5,
           "MaxAttempts": 1,
@@ -99,10 +99,10 @@
       "Retry": [
         {
           "ErrorEquals": [
-            "States.TaskFailed"
+            "errorString"
           ],
           "IntervalSeconds": 5,
-          "MaxAttempts": 0,
+          "MaxAttempts": 1,
           "BackoffRate": 2
         }
       ],
@@ -129,10 +129,10 @@
       "Retry": [
         {
           "ErrorEquals": [
-            "States.TaskFailed"
+            "errorString"
           ],
           "IntervalSeconds": 5,
-          "MaxAttempts": 0,
+          "MaxAttempts": 1,
           "BackoffRate": 2
         }
       ],
@@ -154,10 +154,10 @@
       "Retry": [
         {
           "ErrorEquals": [
-            "States.TaskFailed"
+            "errorString"
           ],
           "IntervalSeconds": 5,
-          "MaxAttempts": 0,
+          "MaxAttempts": 1,
           "BackoffRate": 2
         }
       ],
@@ -178,7 +178,7 @@
       "Retry": [
         {
           "ErrorEquals": [
-            "States.TaskFailed"
+            "errorString"
           ],
           "IntervalSeconds": 5,
           "MaxAttempts": 0,
