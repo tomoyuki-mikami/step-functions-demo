@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  test-step_function
+  
+  Sample SAM Template for test-step_function
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 10
+
+Resources:
+  TestStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      DefinitionUri: statemachine/test.json
+      Events:
+        Ftp:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 1 * * ? *)  # 毎日日本時間 10:00 に実行
+            Enabled: False
+      DefinitionSubstitutions:
+        StartFunctionArn: !GetAtt StartFunction.Arn
+        Test1FunctionArn: !GetAtt Test1Function.Arn
+        Test2FunctionArn: !GetAtt Test2Function.Arn
+        EndFunctionArn: !GetAtt EndFunction.Arn
+        NotifyFunctionArn: !GetAtt NotifyFunction.Arn
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName: !Ref StartFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref Test1Function
+        - LambdaInvokePolicy:
+            FunctionName: !Ref Test2Function
+        - LambdaInvokePolicy:
+            FunctionName: !Ref EndFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref NotifyFunction
+        - CloudWatchPutMetricPolicy: {}
+
+  StartFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: start/
+      Handler: start
+      Runtime: go1.x
+      Environment:
+        Variables:
+          TZ: Asia/Tokyo
+
+  Test1Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: test1/
+      Handler: test1
+      Runtime: go1.x
+      Environment:
+        Variables:
+          TZ: Asia/Tokyo
+
+  Test2Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: test2/
+      Handler: test2
+      Runtime: go1.x
+      Environment:
+        Variables:
+          TZ: Asia/Tokyo
+
+  EndFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: end/
+      Handler: end
+      Runtime: go1.x
+      Environment:
+        Variables:
+          TZ: Asia/Tokyo
+
+  NotifyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: notify/
+      Handler: notify
+      Runtime: go1.x
+      Environment:
+        Variables:
+          TZ: Asia/Tokyo

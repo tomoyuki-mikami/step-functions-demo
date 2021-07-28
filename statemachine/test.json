@@ -1,0 +1,191 @@
+{
+  "Comment": "test StepFunction",
+  "StartAt": "StartFunction",
+  "States": {
+    "StartFunction": {
+      "Type": "Task",
+      "Resource": "${StartFunctionArn}",
+      "ResultPath": "$.result",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 0,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "NotifyFunction"
+        }
+      ],
+      "Next": "Test1Function"
+    },
+    "Test1Function": {
+      "Type": "Task",
+      "Resource": "${Test1FunctionArn}",
+      "Parameters": {
+        "TargetYmd.$": "$.targetYmd",
+        "RandNum.$": "$.randNum",
+        "TargetName": "てすと1 その1"
+      },
+      "ResultPath": "$.result",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 1,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "EndFunction"
+        }
+      ],
+      "Next": "Test2Function"
+    },
+    "Test2Function": {
+      "Type": "Task",
+      "Resource": "${Test1FunctionArn}",
+      "Parameters": {
+        "TargetYmd.$": "$.targetYmd",
+        "RandNum.$": "$.randNum",
+        "TargetName": "てすと1 その2"
+      },
+      "ResultPath": "$.result",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 1,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "EndFunction"
+        }
+      ],
+      "Next": "Test3Function"
+    },
+    "Test3Function": {
+      "Type": "Task",
+      "Resource": "${Test1FunctionArn}",
+      "Parameters": {
+        "TargetYmd.$": "$.targetYmd",
+        "RandNum.$": "$.randNum",
+        "TargetName": "てすと1 その3"
+      },
+      "ResultPath": "$.result",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 0,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "EndFunction"
+        }
+      ],
+      "Next": "Test4Function"
+    },
+    "Test4Function": {
+      "Type": "Task",
+      "Resource": "${Test2FunctionArn}",
+      "Parameters": {
+        "TargetYmd.$": "$.targetYmd",
+        "RandNum.$": "$.randNum",
+        "TargetName": "てすと2 その1"
+      },
+      "ResultPath": "$.result",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 0,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "EndFunction"
+        }
+      ],
+      "Next": "EndFunction"
+    },
+    "EndFunction": {
+      "Type": "Task",
+      "Resource": "${EndFunctionArn}",
+      "ResultPath": "$.result",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 0,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.end_error",
+          "Next": "NotifyFunction"
+        }
+      ],
+      "Next": "NotifyFunction"
+    },
+    "NotifyFunction": {
+      "Type": "Task",
+      "Resource": "${NotifyFunctionArn}",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 0,
+          "BackoffRate": 2
+        }
+      ],
+      "End": true
+    }
+  }
+}
